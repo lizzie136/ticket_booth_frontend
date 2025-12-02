@@ -494,35 +494,8 @@ Frontend
 
 The aim of the frontend is to keep the flow simple and transparent so reviewers can easily see how the booking API is used and how concurrency errors are surfaced to the user.
 
-⸻
 
-Testing
-	•	Unit tests: cover validation and booking logic (especially failure cases).
-	•	Integration tests: simulate concurrent booking requests for:
-	•	Last GA tickets in a tier
-	•	Same seat in a seated event
-
-Example concurrent test idea:
-	•	Spawn 10 parallel requests trying to buy the last 1 VIP ticket.
-	•	Expect exactly 1 success and 9 failures with INSUFFICIENT_INVENTORY.
-
-⸻
-
-Trade-offs & Future Improvements
-	•	Single DB: For simplicity and time, everything is in one relational DB. At scale, catalog reads could be moved to a separate read replica or cache.
-	•	Payments: Payment flow is simulated; in a real system we would integrate with a provider (Stripe, etc.) and handle:
-	•	Idempotency keys
-	•	Webhook-based confirmation
-	•	Seats UX: For seated events, the UI currently uses a simple grid/list. It could be upgraded to an interactive seat map.
-	•	RBAC: A full role/permission system is modeled in the schema but not fully implemented in code. It can be used to restrict which users can create/update events and venues.
-	•	Multi-region: To hit true 99.99% in production, we’d:
-	•	Run the API in multiple regions
-	•	Use a globally accessible DB (or per-region DB with strong consistency for booking writes)
-	•	Keep the booking write path in a single primary region and fan out reads globally.
-
-⸻
-
-Conclusion
+## Conclusion
 
 This project focuses on:
 	•	Clear domain modeling for events, venues, and tickets
